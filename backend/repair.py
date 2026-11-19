@@ -29,9 +29,9 @@ def fix_code(code, bug_type=None):
     # Undefined variable: suggest, don't guess
     if bug_type == "UndefinedVariable":
         fixes.append(
-            "Undefined variable detected. "
-            "Please declare the variable with the correct value."
-        )
+           "Undefined variable detected. "
+           "Please define the variable before using it."
+    )
 
     return {
         "success": True,
