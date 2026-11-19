@@ -1,16 +1,22 @@
 
 import subprocess
 import sys
+from pathlib import Path
 
 
 def run_tests(test_file, timeout=30):
     try:
+        test_path = Path(test_file)
+
+        if not test_path.is_absolute():
+            test_path = Path(__file__).parent / test_path
+
         result = subprocess.run(
             [
                 sys.executable,
                 "-m",
                 "pytest",
-                test_file,
+                str(test_path),
                 "-v",
                 "--tb=short"
             ],
@@ -21,7 +27,6 @@ def run_tests(test_file, timeout=30):
 
         output = result.stdout + "\n" + result.stderr
 
-        # Extract test summary
         summary = ""
         for line in output.splitlines():
             if " passed" in line or " failed" in line:

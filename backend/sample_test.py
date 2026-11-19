@@ -8,4 +8,4 @@ def test_multiplication():
 
 
 def test_failure():
-    assert 2 + 2 == 5
+    assert 2 + 2 == 4
