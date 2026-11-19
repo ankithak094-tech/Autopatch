@@ -3,23 +3,35 @@ import ast
 from pathlib import Path
 
 
-def fix_code(code):
+def fix_code(code, bug_type=None):
     fixed_code = code
     fixes = []
 
-    # Fix 1: Replace eval() with a safer literal_eval()
-    if "eval(" in fixed_code:
-        fixed_code = fixed_code.replace(
-            "eval(", "ast.literal_eval("
-        )
-        fixes.append("Replaced eval() with ast.literal_eval()")
+    # Fix unsafe eval()
+    if bug_type in (None, "UnsafeFunction"):
+        if "eval(" in fixed_code:
+            fixed_code = fixed_code.replace(
+                "eval(", "ast.literal_eval("
+            )
+            fixes.append(
+                "Replaced eval() with ast.literal_eval()."
+            )
 
-    # Fix 2: Fix simple division by zero
-    if "/ 0" in fixed_code:
-        fixed_code = fixed_code.replace(
-            "/ 0", "/ 1"
+    # Fix simple division by zero
+    if bug_type in (None, "DivisionByZero"):
+        if "/ 0" in fixed_code:
+            fixed_code = fixed_code.replace("/ 0", "/ 1")
+            fixes.append(
+                "Replaced division by zero with division by one. "
+                "Please review this change."
+            )
+
+    # Undefined variable: suggest, don't guess
+    if bug_type == "UndefinedVariable":
+        fixes.append(
+            "Undefined variable detected. "
+            "Please declare the variable with the correct value."
         )
-        fixes.append("Replaced division by zero with division by 1")
 
     return {
         "success": True,
