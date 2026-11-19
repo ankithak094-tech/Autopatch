@@ -1,12 +1,18 @@
 
 import subprocess
 import sys
+from pathlib import Path
 
 
 def run_tests(test_file):
     try:
+        test_path = Path(test_file)
+
+        if not test_path.is_absolute():
+            test_path = Path(__file__).parent / test_path
+
         result = subprocess.run(
-            [sys.executable, "-m", "pytest", test_file, "-v"],
+            [sys.executable, "-m", "pytest", str(test_path), "-v"],
             capture_output=True,
             text=True,
             timeout=30
