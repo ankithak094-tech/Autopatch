@@ -1,5 +1,2 @@
-
-def add(a, b):
-    return a + b
-
-print(add(10, 20))
+x = 10 / 1
+print(unknown_variable)
