@@ -6,17 +6,20 @@ from tester import validate_fixed_code
 
 def run_autopatch(code):
 
+    original_code = code
+
     # Step 1: Detect bugs
     bugs = detect_bugs(code)
 
     print("\nDETECTED BUGS:")
+
     if bugs:
         for bug in bugs:
             print(bug)
     else:
         print("No bugs detected.")
 
-    # Step 2: Generate fixes
+    # Step 2: Generate repair candidates
     fixed_code = code
     all_fixes = []
 
@@ -25,7 +28,6 @@ def run_autopatch(code):
         fixed_code = result["fixed_code"]
         all_fixes.extend(result["fixes"])
 
-    # Step 3: Display suggested fixes
     print("\nSUGGESTED FIXES:")
 
     if all_fixes:
@@ -34,25 +36,16 @@ def run_autopatch(code):
     else:
         print("No fixes required.")
 
-    # Step 4: Validate the generated code
-    print("\nVALIDATING FIXED CODE:")
+    # Step 3: Validate candidate code
+    print("\nVALIDATING REPAIRED CODE:")
 
     validation = validate_fixed_code(fixed_code)
 
     print("Validation successful:", validation["success"])
 
-    if validation["output"]:
-        print("Program output:")
-        print(validation["output"])
+    # Step 4: Save only if validation succeeds
+    if all_fixes and validation["success"]:
 
-    if validation["error"]:
-        print("Validation error:")
-        print(validation["error"])
-
-    # Step 5: Save generated code for review
-    save_result = None
-
-    if all_fixes:
         save_result = save_fixed_code(
             fixed_code,
             "backend/fixed_code.py"
@@ -60,6 +53,13 @@ def run_autopatch(code):
 
         print("\nSAVE RESULT:")
         print(save_result)
+
+    else:
+        fixed_code = original_code
+        save_result = None
+
+        print("\nRepair was not saved.")
+        print("Original code has been preserved.")
 
     return {
         "bugs": bugs,
@@ -73,8 +73,11 @@ def run_autopatch(code):
 if __name__ == "__main__":
 
     sample_code = """
-x = 10 / 0
-print(unknown_variable)
+total=100
+print(totla)
 """
+
+    print("\nCODE BEING TESTED:")
+    print(sample_code)
 
     run_autopatch(sample_code)
