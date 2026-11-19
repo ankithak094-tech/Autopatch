@@ -13,28 +13,36 @@ def fix_code(code, bug_type=None):
             fixed_code = fixed_code.replace(
                 "eval(", "ast.literal_eval("
             )
+
+            # Add ast import if it is missing
+            if "import ast" not in fixed_code:
+                fixed_code = "import ast\n" + fixed_code
+
             fixes.append(
-                "Replaced eval() with ast.literal_eval()."
+                "Replaced eval() with ast.literal_eval(). "
+                "Validation is required."
             )
 
     # Fix simple division by zero
     if bug_type in (None, "DivisionByZero"):
         if "/ 0" in fixed_code:
             fixed_code = fixed_code.replace("/ 0", "/ 1")
+
             fixes.append(
                 "Replaced division by zero with division by one. "
-                "Please review this change."
+                "Please review the result."
             )
 
-    # Undefined variable: suggest, don't guess
+    # Undefined variables cannot be safely guessed
     if bug_type == "UndefinedVariable":
         fixes.append(
-           "Undefined variable detected. "
-           "Please define the variable before using it."
+        "Undefined variable detected. "
+        "Manual correction required: define the variable "
+        "with its intended value."
     )
 
     return {
-        "success": True,
+        "success": bool(fixes),
         "fixed_code": fixed_code,
         "fixes": fixes
     }
@@ -43,7 +51,12 @@ def fix_code(code, bug_type=None):
 def save_fixed_code(fixed_code, output_file="fixed_code.py"):
     try:
         output_path = Path(output_file)
-        output_path.write_text(fixed_code, encoding="utf-8")
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+
+        output_path.write_text(
+            fixed_code,
+            encoding="utf-8"
+        )
 
         return {
             "success": True,
