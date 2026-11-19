@@ -46,3 +46,14 @@ print(totla)
 
     assert "print(total)" in result["fixed_code"]
     assert "print(totla)" not in result["fixed_code"]
+
+
+def test_fix_syntax_error():
+    result = fix_code(
+        'print("Hello"',
+        "SyntaxError"
+    )
+
+    assert result["success"] is True
+    assert result["fixed_code"] == 'print("Hello")'
+    assert "Added missing closing parenthesis." in result["fixes"]

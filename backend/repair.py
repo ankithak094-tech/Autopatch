@@ -8,6 +8,24 @@ from pathlib import Path
 def fix_code(code, bug_type=None):
     fixed_code = code
     fixes = []
+        # Fix simple missing closing parenthesis
+    if bug_type == "SyntaxError":
+        try:
+            ast.parse(fixed_code)
+        except SyntaxError as error:
+            if error.msg == "'(' was never closed":
+                fixed_code = fixed_code + ")"
+
+                try:
+                    ast.parse(fixed_code)
+                    fixes.append(
+                        "Added missing closing parenthesis."
+                    )
+                except SyntaxError:
+                    fixed_code = code
+                    fixes.append(
+                        "Could not safely repair the syntax error."
+                    )
 
     # Fix unsafe eval()
     if bug_type in (None, "UnsafeFunction"):
