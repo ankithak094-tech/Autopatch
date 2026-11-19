@@ -1,35 +1,16 @@
-AutoPatch 🚀
+# React + Vite
 
-AI-Powered Automatic Bug Detection and Code Correction
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-📌 About the Project
+Currently, two official plugins are available:
 
-AutoPatch is an intelligent coding assistant designed to detect programming errors, explain their causes, and suggest corrected code automatically.
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-🎯 Objectives
+## React Compiler
 
-- Detect errors in source code.
-- Identify the causes of bugs.
-- Suggest possible solutions.
-- Generate corrected code.
-- Help developers save debugging time.
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-✨ Key Features
+## Expanding the ESLint configuration
 
-1. Automatic Bug Detection
-2. Error Explanation
-3. AI-Based Code Correction
-4. Code Testing
-5. Before-and-After Code Comparison
-
-💻 Technologies Used
-
-- Frontend: To be decided
-- Backend: To be decided
-- Programming Languages: Python, Java
-- AI: To be decided
-
-
-📄 License
-
-MIT License
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
